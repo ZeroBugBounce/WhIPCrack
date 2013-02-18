@@ -5,7 +5,7 @@ Inter Process Communication via a very simple, thin layer over the .NET 4.0+ mem
 
 ### Example: ###
     
-    var sender = new Sender<Message>(name: "speedTest", messageSerializer: messageSerializer, messageLength: 16, maxQueuedMessages: 200);
+    var sender = new Sender<Message>(name: "speedTest", messageSerializer: messageSerializer, messageLength: 32, maxQueuedMessages: 200);
 
 The maxQueuedMessages parameter means the maximum number of messages that are going to exist in the memory mapped file at once.  The more messages you send at once, the greater overall throughput you are going to get. 
 
