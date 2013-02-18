@@ -16,7 +16,7 @@ messageSerializer is a delegate that you provide to manually serialize your mess
          buffer.Write<Message>(msg);
     };
 
-On the revieving side:
+On the receiving side:
 
     var receiver = new Receiver<Message>(name: "speedTest", messageDeserializer: messageDeserializer, messageLength: 32, maxQueuedMessages: 200, 
                                         onMessage: msg => { /* whatever you wish to do when the message arrives* */});
