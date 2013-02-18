@@ -12,9 +12,17 @@ namespace ConsoleReceiver
 		public Int32 C;
 		public Int32 D;
 
+		public Coords Coordinates;
+
+		public struct Coords
+		{
+			public Double X;
+			public Double Y;
+		}
+
 		public override string ToString()
 		{
-			return String.Format("A {0} B {1} C {2} D {3}", A, B, C, D);
+			return String.Format("A {0} B {1} C {2} D {3} Coords: {4},{5}", A, B, C, D, Coordinates.X, Coordinates.Y);
 		}
 	}
 
@@ -45,7 +53,8 @@ namespace ConsoleReceiver
 
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
-			var receiver = new Receiver<Message>("speedTest", messageDeserializer, 16, 200, msg =>
+			var receiver = new Receiver<Message>(name: "speedTest", messageDeserializer: messageDeserializer, messageLength: 32, maxQueuedMessages: 200, 
+				onMessage: msg =>
 			{
 				MessagesReceived++;
 

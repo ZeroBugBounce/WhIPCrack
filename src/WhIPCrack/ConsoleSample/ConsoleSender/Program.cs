@@ -15,9 +15,17 @@ namespace ConsoleSender
 		public Int32 C;
 		public Int32 D;
 
+		public Coords Coordinates;
+
+		public struct Coords
+		{
+			public Double X;
+			public Double Y;
+		}
+
 		public override string ToString()
 		{
-			return String.Format("A {0} B {1} C {2} D {3}", A, B, C, D);
+			return String.Format("A {0} B {1} C {2} D {3} Coords: {4},{5}", A, B, C, D, Coordinates.X, Coordinates.Y);
 		}
 	}
 
@@ -49,7 +57,7 @@ namespace ConsoleSender
 			};
 
 			// assembly the sender, queue length is not currently implemented
-			var sender = new Sender<Message>("speedTest", messageSerializer, 16, 200);
+			var sender = new Sender<Message>("speedTest", messageSerializer, 32, 200);
 
 			sender.MaxPredispatchQueueLength = 100000;
 
@@ -67,15 +75,24 @@ namespace ConsoleSender
 
 			while (true)
 			{
-				Message[] messages = new Message[200];
+				Message[] messages = new Message[1];
 
 				for (Int32 index = 0; index < messages.Length; index++)
 				{
-					messages[index] = new Message { A = messageValue, B = messageValue, C = messageValue, D = messageValue };
+					messages[index] = new Message
+					{
+						A = messageValue,
+						B = messageValue,
+						C = messageValue,
+						D = messageValue,
+						Coordinates = new Message.Coords { X = messageValue, Y = messageValue }
+					};
+
 					messageValue++;
 				}
 
 				sender.Send(messages);
+				//Thread.Sleep(1000);
 			}
 		}
 
