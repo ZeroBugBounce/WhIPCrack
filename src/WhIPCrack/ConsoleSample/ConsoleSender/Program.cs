@@ -51,15 +51,13 @@ namespace ConsoleSender
 		{
 			Int32 messageValue = 0;
 
-			Action<Message, WriteBuffer> messageSerializer = (msg, buffer) =>
+			Action<Message[], WriteBuffer> messageSerializer = (msg, buffer) =>
 			{
-				buffer.Write<Message>(msg);
+				buffer.WriteArray<Message>(msg);
 			};
 
 			// assembly the sender, queue length is not currently implemented
-			var sender = new Sender<Message>("speedTest", messageSerializer, 32, 200);
-
-			sender.MaxPredispatchQueueLength = 100000;
+			var sender = new Sender<Message>("speedTest", messageSerializer, 32, 1000);
 
 			sender.MessageDispatched += (s, e) =>
 			{
@@ -75,7 +73,7 @@ namespace ConsoleSender
 
 			while (true)
 			{
-				Message[] messages = new Message[1];
+				Message[] messages = new Message[100];
 
 				for (Int32 index = 0; index < messages.Length; index++)
 				{
@@ -97,36 +95,6 @@ namespace ConsoleSender
 		}
 
 		static Int32 MessagesDispatched;
-		//static Int32 MessagesReceived;
-
-		//static void StartSender()
-		//{
-		//    var sender = new Sender<SampleMsg1>("sampleMsg1", msg =>
-		//    {
-		//        var buffer = new Byte[5];
-
-		//        if (BitConverter.IsLittleEndian)
-		//        {
-		//            buffer[0] = (byte)(msg.Id);
-		//            buffer[1] = (byte)(msg.Id >> 8);
-		//            buffer[2] = (byte)(msg.Id >> 16);
-		//            buffer[3] = (byte)(msg.Id >> 24);
-		//            buffer[4] = msg.IsActive ? (byte)1 : (byte)0;
-		//        }
-
-		//        return buffer;
-		//    }, 5, 100);
-
-		//    while (true)
-		//    {
-		//        Console.WriteLine("press Enter key to send");
-		//        Console.ReadLine();
-		//        var msg = GenerateRandoSampleMsg();
-
-		//        Console.WriteLine("{0} {1}", msg.Id, msg.IsActive);
-		//        sender.Send(msg);
-		//    }
-		//}
 
 		static void Main(string[] args)
 		{

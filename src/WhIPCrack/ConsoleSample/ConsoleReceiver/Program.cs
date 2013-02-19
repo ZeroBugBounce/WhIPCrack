@@ -53,14 +53,14 @@ namespace ConsoleReceiver
 
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
-			var receiver = new Receiver<Message>(name: "speedTest", messageDeserializer: messageDeserializer, messageLength: 32, maxQueuedMessages: 200, 
+			var receiver = new Receiver<Message>(name: "speedTest", messageDeserializer: messageDeserializer, messageLength: 32, maxQueuedMessages: 1000, 
 				onMessage: msg =>
 			{
 				MessagesReceived++;
 
 				//Console.WriteLine(msg);
 
-				if (MessagesReceived % 800000 == 0)
+				if (MessagesReceived % 200000 == 0)
 				{
 					Console.WriteLine("{0:###,#} messages in {1:0.00} sec {2:###,0.00}msg/sec | {3:0}ns per message", MessagesReceived, timer.Elapsed.TotalSeconds,
 						((Double)MessagesReceived) / timer.Elapsed.TotalSeconds, (timer.Elapsed.TotalMilliseconds * 1000000) / ((Double)MessagesReceived));

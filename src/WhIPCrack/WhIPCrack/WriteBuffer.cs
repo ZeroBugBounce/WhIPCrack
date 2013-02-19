@@ -18,6 +18,11 @@ namespace whIPCrack
 		private MemoryMappedViewAccessor accessor;
 		private Int64 currentLocation = 0;
 
+		public void WriteArray<T>(T[] values) where T : struct
+		{
+			accessor.WriteArray<T>(currentLocation, values, 0, values.Length);
+		}
+
 		public void Write<T>(T structure) where T : struct
 		{
 			accessor.Write<T>(currentLocation, ref structure);
