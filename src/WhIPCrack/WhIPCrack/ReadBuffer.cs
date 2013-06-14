@@ -18,12 +18,12 @@ namespace whIPCrack
 		private MemoryMappedViewAccessor accessor;
 		private Int64 currentLocation = 0;
 
-		public Int32 Read()
-		{
-			Int32 value = accessor.ReadInt32(currentLocation);
-			currentLocation += Constants.HeaderSize;
-			return value;
-		}
+        //public Int32 ReadInt32()
+        //{
+        //    Int32 value = accessor.ReadInt32(currentLocation);
+        //    currentLocation += Constants.HeaderSize;
+        //    return value;
+        //}
 
 		public T Read<T>() where T : struct
 		{
@@ -32,5 +32,14 @@ namespace whIPCrack
 			currentLocation += Marshal.SizeOf(typeof(T));
 			return value;
 		}
+
+        public T[] ReadArray<T>() where T : struct
+        {
+            int length = Read<Int32>();
+            T[] values = new T[length];
+            accessor.ReadArray<T>(currentLocation, values, 0, values.Length);
+            currentLocation += Marshal.SizeOf(typeof(T)) * values.Length;
+            return values;
+        }
 	}
 }

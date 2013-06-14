@@ -15,7 +15,6 @@ namespace whIPCrack
 		Action<TMessage[], WriteBuffer> serializer;
 
 		Int32 msgLength;
-		Int32 maxPredispatchQueueLength = -1;
 		AutoResetEvent predispatchQueueLengthWaitHandle = new AutoResetEvent(false);
 		EventWaitHandle senderWaitHandle;
 		EventWaitHandle receiverWaitHandle;

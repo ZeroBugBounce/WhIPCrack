@@ -15,18 +15,30 @@ namespace ConsoleSender
 		public Int32 C;
 		public Int32 D;
 
-		public Coords Coordinates;
+        public Coords[] Coordinates;
 
-		public struct Coords
-		{
-			public Double X;
-			public Double Y;
-		}
+        public struct Coords
+        {
+            public Double X;
+            public Double Y;
+        }
 
-		public override string ToString()
-		{
-			return String.Format("A {0} B {1} C {2} D {3} Coords: {4},{5}", A, B, C, D, Coordinates.X, Coordinates.Y);
-		}
+        public override string ToString()
+        {
+            return String.Format("A {0} B {1} C {2} D {3} Coords: {4}", A, B, C, D, CoordinatesToString());
+        }
+
+        string CoordinatesToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var coord in Coordinates)
+            {
+                builder.AppendFormat("Coord {0} {1}", coord.X, coord.Y);
+            }
+
+            return builder.ToString();
+        }
 	}
 
 	class Program
@@ -53,7 +65,14 @@ namespace ConsoleSender
 
 			Action<Message[], WriteBuffer> messageSerializer = (msg, buffer) =>
 			{
-				buffer.WriteArray<Message>(msg);
+                for (int msgIndex = 0; msgIndex < msg.Length; msgIndex++)
+                {
+                    buffer.Write(msg[msgIndex].A);
+                    buffer.Write(msg[msgIndex].B);
+                    buffer.Write(msg[msgIndex].C);
+                    buffer.Write(msg[msgIndex].D);
+                    buffer.WriteArray(msg[msgIndex].Coordinates);
+                }
 			};
 
 			// assembly the sender, queue length is not currently implemented
@@ -61,19 +80,21 @@ namespace ConsoleSender
 
 			sender.MessageDispatched += (s, e) =>
 			{
-				MessagesDispatched++;
+                Console.WriteLine(e.Message.ToString());
 
-				//Console.WriteLine(e.Message);
+                //MessagesDispatched++;
 
-				if (MessagesDispatched % 800000 == 0)
-				{
-					Console.WriteLine("{0:0,0} Messages sent", MessagesDispatched);
-				}
+                ////Console.WriteLine(e.Message);
+
+                //if (MessagesDispatched % 800000 == 0)
+                //{
+                //    Console.WriteLine("{0:0,0} Messages sent", MessagesDispatched);
+                //}
 			};
 
 			while (true)
 			{
-				Message[] messages = new Message[100];
+				Message[] messages = new Message[1];
 
 				for (Int32 index = 0; index < messages.Length; index++)
 				{
@@ -83,14 +104,14 @@ namespace ConsoleSender
 						B = messageValue,
 						C = messageValue,
 						D = messageValue,
-						Coordinates = new Message.Coords { X = messageValue, Y = messageValue }
+						Coordinates = new[] { new Message.Coords { X = messageValue, Y = messageValue }}
 					};
 
 					messageValue++;
 				}
 
 				sender.Send(messages);
-				//Thread.Sleep(1000);
+				Thread.Sleep(10);
 			}
 		}
 

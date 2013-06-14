@@ -49,7 +49,7 @@ namespace whIPCrack
 				senderWaitHandle.WaitOne();
 
 				var buffer = new ReadBuffer(accessor);
-				var messageCount = buffer.Read();
+				var messageCount = buffer.Read<Int32>();
 
 				while (--messageCount >= 0)
 				{

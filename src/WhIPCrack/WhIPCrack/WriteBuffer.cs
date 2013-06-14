@@ -20,7 +20,9 @@ namespace whIPCrack
 
 		public void WriteArray<T>(T[] values) where T : struct
 		{
+            Write(values.Length);
 			accessor.WriteArray<T>(currentLocation, values, 0, values.Length);
+            currentLocation += Marshal.SizeOf(typeof(T)) * values.Length;
 		}
 
 		public void Write<T>(T structure) where T : struct
