@@ -76,25 +76,25 @@ namespace ConsoleSender
 			};
 
 			// assembly the sender, queue length is not currently implemented
-			var sender = new Sender<Message>("speedTest", messageSerializer, 32, 1000);
+			var sender = new Sender<Message>("speedTest", messageSerializer, 56, 5000);
 
 			sender.MessageDispatched += (s, e) =>
 			{
-                Console.WriteLine(e.Message.ToString());
+               // Console.WriteLine(e.Message.ToString());
 
-                //MessagesDispatched++;
+				MessagesDispatched++;
 
-                ////Console.WriteLine(e.Message);
+				//Console.WriteLine(e.Message);
 
-                //if (MessagesDispatched % 800000 == 0)
-                //{
-                //    Console.WriteLine("{0:0,0} Messages sent", MessagesDispatched);
-                //}
+				if (MessagesDispatched % 800000 == 0)
+				{
+					Console.WriteLine("{0:0,0} Messages sent", MessagesDispatched);
+				}
 			};
 
 			while (true)
 			{
-				Message[] messages = new Message[1];
+				Message[] messages = new Message[5000];
 
 				for (Int32 index = 0; index < messages.Length; index++)
 				{
@@ -111,7 +111,6 @@ namespace ConsoleSender
 				}
 
 				sender.Send(messages);
-				Thread.Sleep(10);
 			}
 		}
 

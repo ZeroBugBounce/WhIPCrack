@@ -48,10 +48,9 @@ namespace ConsoleReceiver
 			Thread.Sleep(Timeout.Infinite);
 		}
 
-		static Int32 MessagesReceived;
-
 		static void StartReceiver()
 		{
+			int messagesreceived = 0;
 			var fore = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("**********************************************");
@@ -84,17 +83,15 @@ namespace ConsoleReceiver
 			var receiver = new Receiver<Message>(name: "speedTest", messageDeserializer: messageDeserializer, messageLength: 32, maxQueuedMessages: 1000, 
 				onMessage: msg =>
 			{
-                Console.WriteLine(msg.ToString());
+				//Console.WriteLine(msg.ToString());
 
-                //MessagesReceived++;
+				messagesreceived++;
 
-                //Console.WriteLine(msg);
-
-                //if (MessagesReceived % 1 == 0)
-                //{
-                //    Console.WriteLine("{0:###,#} messages in {1:0.00} sec {2:###,0.00}msg/sec | {3:0}ns per message", MessagesReceived, timer.Elapsed.TotalSeconds,
-                //        ((Double)MessagesReceived) / timer.Elapsed.TotalSeconds, (timer.Elapsed.TotalMilliseconds * 1000000) / ((Double)MessagesReceived));
-                //}
+				if (messagesreceived % 50000 == 0)
+				{
+					Console.WriteLine("{0:###,#} messages in {1:0.00} sec {2:###,0.00}msg/sec | {3:0}ns per message", messagesreceived, timer.Elapsed.TotalMilliseconds,
+						((double)messagesreceived) / timer.Elapsed.TotalSeconds, (timer.Elapsed.TotalMilliseconds * 1000000) / ((double)messagesreceived));
+				}
 			});
 		}
 	}
