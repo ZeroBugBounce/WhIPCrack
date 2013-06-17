@@ -18,13 +18,6 @@ namespace whIPCrack
 		private MemoryMappedViewAccessor accessor;
 		private Int64 currentLocation = 0;
 
-        //public Int32 ReadInt32()
-        //{
-        //    Int32 value = accessor.ReadInt32(currentLocation);
-        //    currentLocation += Constants.HeaderSize;
-        //    return value;
-        //}
-
 		public T Read<T>() where T : struct
 		{
 			T value;
